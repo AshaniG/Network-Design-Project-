@@ -10,7 +10,21 @@ Network design projects built with Cisco Packet Tracer:
 
 A small Python CLI (no dependencies, Python 3.8+) is included in `netcli.py`.
 
-### Interactive UI
+### Web frontend (browser UI)
+
+Start the web frontend and it opens automatically in your browser at
+`http://localhost:8000`:
+
+```bash
+python3 netcli.py web
+```
+
+The page has three cards — Greeting, Packet Tracer project list, and a
+Subnet calculator — each backed by a small JSON API served by the same
+script. Use `--port` to pick a different port and `--no-browser` to skip
+auto-opening the browser. Press `Ctrl+C` in the terminal to stop it.
+
+### Interactive terminal UI
 
 Run the tool with no arguments (or with `ui`) to open a menu-driven interface:
 
