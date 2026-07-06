@@ -10,9 +10,31 @@ Network design projects built with Cisco Packet Tracer:
 
 A small Python CLI (no dependencies, Python 3.8+) is included in `netcli.py`.
 
+### Interactive UI
+
+Run the tool with no arguments (or with `ui`) to open a menu-driven interface:
+
+```bash
+python3 netcli.py
+```
+
+```
++----------------------------------------------+
+|        Network Design Project - netcli       |
++----------------------------------------------+
+|  1) Greeting                                 |
+|  2) List Packet Tracer projects              |
+|  3) Subnet calculator                        |
+|  4) Exit                                     |
++----------------------------------------------+
+```
+
 ### Commands
 
 ```bash
+# Open the interactive menu UI
+python3 netcli.py ui
+
 # Print a greeting
 python3 netcli.py hello --name Ashani
 

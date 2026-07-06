@@ -2,6 +2,8 @@
 """netcli - a simple CLI tool for the Network Design Project repository.
 
 Usage:
+    python netcli.py                 (opens the interactive menu UI)
+    python netcli.py ui
     python netcli.py hello [--name NAME]
     python netcli.py list
     python netcli.py subnet <CIDR>
@@ -66,12 +68,64 @@ def cmd_subnet(args: argparse.Namespace) -> int:
     return 0
 
 
+MENU = """\
++----------------------------------------------+
+|        Network Design Project - netcli       |
++----------------------------------------------+
+|  1) Greeting                                 |
+|  2) List Packet Tracer projects              |
+|  3) Subnet calculator                        |
+|  4) Exit                                     |
++----------------------------------------------+"""
+
+
+def cmd_ui(args: argparse.Namespace) -> int:
+    """Interactive menu UI on top of the CLI commands."""
+    while True:
+        print()
+        print(MENU)
+        try:
+            choice = input("Select an option [1-4]: ").strip()
+        except (EOFError, KeyboardInterrupt):
+            print("\nGoodbye!")
+            return 0
+
+        print()
+        if choice == "1":
+            try:
+                name = input("Your name (press Enter for default): ").strip()
+            except (EOFError, KeyboardInterrupt):
+                print("\nGoodbye!")
+                return 0
+            cmd_hello(argparse.Namespace(name=name or "there"))
+        elif choice == "2":
+            cmd_list(args)
+        elif choice == "3":
+            try:
+                cidr = input("Network in CIDR notation (e.g. 192.168.1.0/26): ").strip()
+            except (EOFError, KeyboardInterrupt):
+                print("\nGoodbye!")
+                return 0
+            if cidr:
+                cmd_subnet(argparse.Namespace(cidr=cidr))
+            else:
+                print("No network entered.")
+        elif choice == "4" or choice.lower() in ("q", "quit", "exit"):
+            print("Goodbye!")
+            return 0
+        else:
+            print(f"Invalid option: '{choice}'. Please choose 1-4.")
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="netcli",
         description="CLI tool for the Network Design Project repository.",
     )
-    subparsers = parser.add_subparsers(dest="command", required=True)
+    subparsers = parser.add_subparsers(dest="command")
+
+    ui = subparsers.add_parser("ui", help="Open the interactive menu UI")
+    ui.set_defaults(func=cmd_ui)
 
     hello = subparsers.add_parser("hello", help="Print a greeting")
     hello.add_argument("--name", default="there", help="Name to greet")
@@ -89,6 +143,8 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv=None) -> int:
     args = build_parser().parse_args(argv)
+    if args.command is None:
+        return cmd_ui(args)
     return args.func(args)
 
 
